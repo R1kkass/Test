@@ -15,3 +15,5 @@ npm run build
 seeder:
 sudo docker-compose exec php php artisan db:seed UserSeeder
 sudo docker-compose exec php php artisan db:seed TaskSeeder
+
+Если не работает schedule - перезапустить конейнер supervisor
