@@ -1,0 +1,83 @@
+version: '3.3'
+
+
+services:
+  mysql: 
+      image: mariadb:10.6 
+      hostname: mysql 
+      tty: true 
+      restart: always 
+      environment:
+        - MYSQL_ROOT_PASSWORD=secret
+      ports: 
+        - "3306:3306" 
+      volumes: 
+        - ./docker/mysql/database:/var/lib/mysql 
+        - ./docker/mysql/my.cnf:/etc/my.cnf 
+        - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql 
+        - ./docker/openssl:/etc/openssl 
+      networks: 
+        - laravel-net
+  
+  php:
+    build:
+      context: ./docker/php
+      dockerfile: dockerfile
+      args:
+        - UID=${UID:-1000}
+        - GID=${GID:-1000}
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./code:/var/www/html:delegated
+    networks:
+      - laravel-net
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: mysql
+      MYSQL_ROOT_PASSWORD: secret
+    networks:
+      - laravel-net
+  
+  nginx:
+      hostname: nginx
+      build: 
+        context: ./docker/nginx
+        dockerfile: dockerfile
+        args:
+          - UID=${UID:-1000}
+          - GID=${GID:-1000}
+      volumes:
+        - ./code:/var/www/html:delegated
+      ports:
+        - "80:80"
+      links:
+        - php
+      restart:
+        always
+      networks:
+        - laravel-net
+  
+  supervisor:
+    build:
+      context: ./docker/supervisor
+      dockerfile: dockerfile
+      args:
+        - UID=${UID:-1000}
+        - GID=${GID:-1000}
+    container_name: supervisor
+    volumes:
+      - ./code:/var/www/html
+    depends_on:
+      php:
+        condition: service_started
+    restart: always
+    networks:
+      - laravel-net
+networks:
+  laravel-net:
