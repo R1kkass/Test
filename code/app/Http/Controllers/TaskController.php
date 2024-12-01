@@ -78,7 +78,7 @@ class TaskController extends Controller
         Gate::authorize("updateStatus", $task);
         
         $task->status = Task::ACTIVE;
-        $task->user_id_getter;
+        $task->user_id_getter = null;
         $task->save();
 
         return redirect()->route("userTasks")->with('message', 'Задание отменено');
