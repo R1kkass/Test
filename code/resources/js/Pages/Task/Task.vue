@@ -21,7 +21,7 @@ const submit = () => {
 
     <AuthenticatedLayout>
         <div class="flex items-center flex-col">
-            <div class="p-6 m-5 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+            <div class="p-6 m-5 bg-white border border-gray-200 rounded-lg shadow">
                 <h5 class="mb-2 text-2xl font-bold tracking-tight">{{task.title}}</h5>
                 <p class="font-normal">Имя создателя: {{task.user_creator.name}}</p>
                 <p class="font-normal">Описание: {{ task.body }}</p>

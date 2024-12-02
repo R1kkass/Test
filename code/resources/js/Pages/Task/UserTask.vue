@@ -22,7 +22,7 @@ const badges = {
     <Head title="Задача" />
 
     <AuthenticatedLayout>
-        <div class="max-w m-5 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+        <div class="max-w m-5 p-6 bg-white border border-gray-200 rounded-lg shadow">
             <h5 class="mb-2 text-2xl font-bold tracking-tight">{{task.title}}</h5>
             <p class="font-normal">Описание: {{ task.body }}</p>
             <p v-if="user_getter_name" class="font-normal">Выполняюший пользователь: {{ task.user_getter.name }}</p>
